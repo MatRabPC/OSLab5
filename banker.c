@@ -33,31 +33,42 @@ int need[NUM_CUSTOMERS][NUM_RESOURCES];
 
 
 // Define functions declared in banker.h here
-// bool request_res(int n_customer, int request[])
-// {
-//      ...
-// }
+bool request_res(int n_customer, int request[])
+//{
+//}
 
 // Release resources, returns true if successful
 // bool release_res(int n_customer, int release[])
 // {
-//      ...
+//      
 // }
 
 
 int main(int argc, char *argv[])
 {
-    // ==================== YOUR CODE HERE ==================== //
-
-    // Read in arguments from CLI, NUM_RESOURCES is the number of arguments   
-    
-    // Allocate the available resources
+    // Read in arguments from CLI, NUM_RESOURCES is the number of arguments 
+    // Allocate the available resources  
+    available[0] = atoi(argv[1]);
+    available[1] = atoi(argv[2]);
+    available[2] = atoi(argv[3]);
+    printf("Available %d, Maximum %d, Allocation %d\n", available[0], available[1], available[2]);
 
     // Initialize the pthreads, locks, mutexes, etc.
+    pid_t pid;
+    pthread_t customers[NUM_CUSTOMERS]; 
+    sem_t mutex;
+
+    if (sem_init(&mutex, 0, 1))
+    {
+        printf("Could not initialize a semaphore\n");
+        return -1;
+    }
+
+
 
     // Run the threads and continually loop
 
-    // The threads will request and then release random numbers of resources
+    // The threads will request and then release random numbers of resources    // Allocate the available resources
 
     // If your program hangs you may have a deadlock, otherwise you *may* have
     // implemented the banker's algorithm correctly
