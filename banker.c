@@ -33,7 +33,7 @@ int need[NUM_CUSTOMERS][NUM_RESOURCES];
 
 
 // Define functions declared in banker.h here
-bool request_res(int n_customer, int request[])
+//bool request_res(int n_customer, int request[]) 
 //{
 //}
 
@@ -42,6 +42,27 @@ bool request_res(int n_customer, int request[])
 // {
 //      
 // }
+
+int cc; //global customer counter
+void cust_init() //Initialize customer resources
+{ //A has 10, B has 5, C has 7
+    for (int i = 0; i<NUM_RESOURCES; i++){
+        maximum[cc][0] = rand() % 10;
+        maximum[cc][1] = rand() % 5;
+        maximum[cc][2] = rand() % 7; 
+    }
+     for (int i = 0; i<NUM_RESOURCES; i++){
+        allocation[cc][0] = rand() % 10;
+        allocation[cc][1] = rand() % 5;
+        allocation[cc][2] = rand() % 7; 
+    }
+   
+     for (int i = 0; i<NUM_RESOURCES; i++){
+        need[cc][0] = rand() % 10;
+        need[cc][1] = rand() % 5;
+        need[cc][2] = rand() % 7; 
+    }
+};
 
 
 int main(int argc, char *argv[])
@@ -54,17 +75,15 @@ int main(int argc, char *argv[])
     printf("Available %d, Maximum %d, Allocation %d\n", available[0], available[1], available[2]);
 
     // Initialize the pthreads, locks, mutexes, etc.
-    pid_t pid;
-    pthread_t customers[NUM_CUSTOMERS]; 
-    sem_t mutex;
-
-    if (sem_init(&mutex, 0, 1))
+    pthread_t customer[NUM_CUSTOMERS];
+    for (cc = 0; cc<NUM_CUSTOMERS; cc++)
     {
-        printf("Could not initialize a semaphore\n");
-        return -1;
+        printf("ENTER customer %d\n", cc);
+        pthread_create(&customer[cc], NULL, &cust_init, (void *)cc);
     }
 
-
+    pthread_mutex_t mutex;
+    pthread_mutex_init(&mutex, NULL);
 
     // Run the threads and continually loop
 
@@ -76,5 +95,6 @@ int main(int argc, char *argv[])
     // If you are having issues try and limit the number of threads (NUM_CUSTOMERS)
     // to just 2 and focus on getting the multithreading working for just two threads
 
+    pthread_exit(NULL);
     return EXIT_SUCCESS;
 }
